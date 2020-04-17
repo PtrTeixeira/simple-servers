@@ -1,4 +1,4 @@
-.PHONEY: clean
+.PHONY: clean
 
 build/server: main.go
 	go build -o build/server
