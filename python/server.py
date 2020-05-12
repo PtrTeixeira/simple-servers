@@ -1,7 +1,8 @@
 import http.server
+import os
 import socketserver
 
-PORT = 3000
+PORT = int(os.getenv("PORT", "3000"))
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):

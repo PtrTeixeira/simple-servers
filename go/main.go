@@ -1,17 +1,34 @@
 package main
 
 import (
-  "fmt"
-  "net/http"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"strconv"
 )
 
 func hello(w http.ResponseWriter, req *http.Request) {
-  fmt.Fprintf(w, "Hello World!\n")
+	fmt.Fprintf(w, "Hello World!\n")
+}
+
+func getenv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return fallback
 }
 
 func main() {
-  http.HandleFunc("/", hello)
+	http.HandleFunc("/", hello)
 
-  fmt.Printf("Listening on port %d\n", 3000)
-  http.ListenAndServe(":3000", nil)
+	portStr := getenv("PORT", "3000")
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		log.Fatalf("Given an invalid port \"%s\"!\n", portStr)
+	}
+
+	log.Printf("Listening on port %d\n", port)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
